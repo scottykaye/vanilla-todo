@@ -1,5 +1,37 @@
 import './style.css'
 
+
+const jsonData = JSON.stringify({ 'test': 'test1' })
+
+const getData = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    let condition = true;
+    if (condition) {
+      resolve(jsonData)
+    } else {
+      reject(new Error('Error retrieving data'))
+    }
+  }, 1000)
+})
+
+async function data() {
+  try {
+    let test = await getData
+
+    return test
+  } catch (e) {
+    console.log('error fetching data', e)
+  }
+}
+
+let test;
+try {
+  test = await getData
+} catch (e) {
+  console.log('error fetching data', e)
+}
+
+console.log(test, await data())
 function deleteItem(deleteButton, wrapperElement, container) {
   deleteButton.addEventListener('click', () => {
     const allNodes = document.querySelectorAll('.Item')
@@ -144,15 +176,23 @@ function input(element, wrapperElement, buttonElement) {
 }
 
 
+
 document.querySelector('#app').innerHTML = `
-  <div class="Container">
+  <form class="Container">
     <div class="TopContainer">
-      <input type="text" class="MainInput" placeholder="Add a Todo" />
+      <input name="mainInput" type="text" class="MainInput" placeholder="Add a Todo" />
       <button type="button" class="MainButton">Add Todo</button>
     </div>
     <div class="MainWrapper"></div>
-  </div>
+  </form>
 `
 
 
 input(document.querySelector('.MainInput'), document.querySelector('.MainWrapper'), document.querySelector('.MainButton'))
+
+const form = document.querySelector('.Container')
+const data1 = new FormData(form);
+data1.append('name', JSON.stringify({ isCompleted: true, isEditing: false, id: 1, name: 'name' }))
+console.log(Object.fromEntries(data1))
+
+
